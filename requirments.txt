@@ -1,0 +1,3 @@
+pip install opencv-python numpy PyPDF2 tqdm pytesseract pdf2image streamlit
+
+
