@@ -1,34 +1,41 @@
 #!/bin/bash
 
-# Path to the requirements file
+# Define main variables
 REQUIREMENTS_FILE="requirments.txt"
-
-# The main folder name
 MAIN_FOLDER="folders"
+SUBFOLDERS=("in" "results" "tmp")
 
-# Sub-folders to create inside the main folder
-FOLDERS=("in" "results" "tmp")
+# Function to check for command existence
+function check_command() {
+    command -v $1 >/dev/null 2>&1 || { echo >&2 "I require $1 but it's not installed. Aborting."; exit 1; }
+}
 
-# Install packages from the requirements file using pip
-echo "Installing requirements from $REQUIREMENTS_FILE..."
-pip install -r $REQUIREMENTS_FILE
+# Function to install Python packages
+function install_requirements() {
+    echo "Installing requirements from $REQUIREMENTS_FILE..."
+    python3 -m pip install -r $REQUIREMENTS_FILE || { echo "Failed to install requirements. Aborting."; exit 1; }
+}
 
-# Check if the main folder already exists. If not, create it.
-if [ ! -d "$MAIN_FOLDER" ]; then
-    echo "Creating $MAIN_FOLDER folder..."
-    mkdir "$MAIN_FOLDER"
-else
-    echo "$MAIN_FOLDER folder already exists."
-fi
+# Function to create folders
+function create_folders() {
+    for folder in "${SUBFOLDERS[@]}"; do
+        mkdir -p "$MAIN_FOLDER/$folder"
+        echo "Created $MAIN_FOLDER/$folder"
+    done
+}
 
-# Create sub-folders inside the main folder
-for FOLDER in "${FOLDERS[@]}"; do
-    if [ ! -d "$MAIN_FOLDER/$FOLDER" ]; then
-        echo "Creating $FOLDER folder inside $MAIN_FOLDER..."
-        mkdir "$MAIN_FOLDER/$FOLDER"
-    else
-        echo "$FOLDER folder already exists inside $MAIN_FOLDER."
-    fi
-done
+# Main script execution starts here
+
+# Check necessary commands
+check_command python3
+check_command pip
+
+# Install Python packages
+install_requirements
+
+# Create main folder and sub-folders
+echo "Setting up folder structure..."
+mkdir -p "$MAIN_FOLDER"
+create_folders
 
 echo "Setup complete."
