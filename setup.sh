@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define main variables
-REQUIREMENTS_FILE="requirments.txt"
+REQUIREMENTS_FILE="requirements.txt"
 MAIN_FOLDER="folders"
 SUBFOLDERS=("in" "results" "tmp")
 
@@ -9,6 +9,7 @@ SUBFOLDERS=("in" "results" "tmp")
 function check_command() {
     command -v $1 >/dev/null 2>&1 || { echo >&2 "I require $1 but it's not installed. Aborting."; exit 1; }
 }
+
 
 # Function to install Python packages
 function install_requirements() {
